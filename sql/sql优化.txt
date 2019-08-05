@@ -5,8 +5,8 @@
 	select id from t where num is null           
 可以在num上设置默认值0，确保表中num列没有null值， 
 然后这样查询：
-  select id from t where num=0
-  select id from t where num=10 or num=20
+	select id from t where num=0
+	select id from t where num=10 or num=20
 可以这样查询：
 	select id from t where num=10
 	union all
@@ -15,10 +15,10 @@
 	select id from t where name like ‘%abc%’
 
 若要提高效率，可以考虑全文检索。
-    select id from t where num in(1,2,3)
+	select id from t where num in(1,2,3)
 
 对于连续的数值，能用 between 就不要用 in 了：
-    select id from t where num between 1 and 3 
+	select id from t where num between 1 and 3 
 
 4.如果查询的两个表大小相当，那么用in和exists差别不大。 
 in： 
@@ -64,3 +64,10 @@ ALTER TABLE `table_name` ADD INDEX index_name ( `字段` );
 当SQL语句需要union两个查询结果集合时，即使检索结果中不会有重复的记录，如果使用union这两个结果集 
 同样会尝试进行合并，然后在输出最终结果前进行排序，因此如果可以判断检索结果中不会有重复的记录时候，应 
 该用union all，这样效率就会因此得到提高。
+
+10.做MySQL优化，我们要善用EXPLAIN查看SQL执行计划。
+type列，连接类型。一个好的SQL语句至少要达到range级别。杜绝出现all级别。
+key列，使用到的索引名。如果没有选择索引，值是NULL。可以采取强制索引方式。
+key_len列，索引长度。
+rows列，扫描行数。该值是个预估值。
+extra列，详细说明。注意，常见的不太友好的值，如下：Using filesort，Using temporary。
