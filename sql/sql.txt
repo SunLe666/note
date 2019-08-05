@@ -7,3 +7,37 @@ FROM
 WHERE
 	table_name = '表名称'
 AND table_schema = '数据库名称'
+
+-- 查询表中指定一些字段 有重复的数据
+SELECT
+	*
+FROM
+	bpm_dim_role a
+WHERE
+	(
+		a.role_group,
+		a.activity_group,
+		a. FUNCTION,
+		a.channel,
+		a.region,
+		a.category
+	) IN (
+		SELECT
+			role_group,
+			activity_group,
+			FUNCTION,
+			channel,
+			region,
+			category
+		FROM
+			bpm_dim_role
+		GROUP BY
+			role_group,
+			activity_group,
+			FUNCTION,
+			channel,
+			region,
+			category
+		HAVING
+			count(*) > 1
+	)
