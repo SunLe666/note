@@ -1,0 +1,9 @@
+-- 查询某张表的所有字段及备注
+SELECT
+	COLUMN_NAME,
+	column_comment
+FROM
+	INFORMATION_SCHEMA. COLUMNS
+WHERE
+	table_name = '表名称'
+AND table_schema = '数据库名称'
