@@ -1,0 +1,66 @@
+1.首先我们需要查看是否已经安装vsftpd,输入命令 ：vsftpd  -v。如果出现以下信息，那么就说明已经安装vsftpd
+	vsftpd :version 3.0.1
+
+2.如果没有安装，那么输入命令： yum  install vsftpd -y 进行安装，出现complete说明安装成功。
+
+3.现在去我们先创建一下用户 ， 命令：useradd  -d /home/ftpuser ftpuser   -d是为用户ftpuser 指定主目录，默认是/home下对应用户名的一个文件夹。
+
+4.接着设置用户密码 ： passwd ftpuser .输入两次以后显示successfully就说明设置好了。
+
+5.接着我们需要查看一下本机外网访问权限，这个一定要开。不然会执行失败：输入 getsebool -a |grep ftp 查看
+	ftpd_full_access --> off
+	tftp_home_dir --> off
+	执行命令
+	setsebool ftpd_full_access on
+	setsebool tftp_home_dir on
+	
+6.这样子就开起来了。接下去我们需要配置一下vsftpd 的配置文件 进入配置文件目录:cd /etc/vsftpd/
+	vi vsftpd.conf
+	其实默认的配置文件就可以满足基本的功能，如果我们需要关闭匿名操作，那么我们把anonymous_enable设置为NO就可以了
+
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http://baijiahao.baidu.com/s?id=1601520475466186984&wfr=spider&for=pc
+

@@ -1,0 +1,258 @@
+Tomcat在Linux上的安装与配置
+
+
+    以下使用的Linux版本为: Redhat Enterprise Linux 7.0 x86_64，Tomcat版本为tomcat-7.0.54.
+
+
+1.下载JDK与Tomcat.
+    jdk下载地址:
+    http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+    tomcat下载地址:
+    http://tomcat.apache.org/download-70.cgi
+
+
+2.jdk安装与配置.
+    (1)jdk安装
+    rpm包:
+    # rpm -ivh jdk-7u55-linux-x64.rpm
+
+
+    tar.gz包:解压缩
+    # mkdir /usr/java
+    # cd /usr/java
+    # tar -zxvf /software/jdk-7u55-linux-x64.tar.gz
+    生成链接以便版本升级
+    # ln -s jdk1.7.0_55 latest
+    # ln -s latest defaultvi
+
+
+    (2)配置环境变量
+    # vi /etc/profile
+    export JAVA_HOME=/usr/java/default
+    export JAVA_BIN=$JAVA_HOME/bin
+    export PATH=$PATH:$JAVA_HOME/bin
+    export CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+    export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+
+
+    使配置生效
+    # source /etc/profile
+
+
+    测试jdk.
+    # java -version
+    java version "1.7.0_55"
+    Java(TM) SE Runtime Environment (build 1.7.0_55-b13)
+    Java HotSpot(TM) 64-Bit Server VM (build 24.55-b03, mixed mode)
+
+
+3.Tomcat的安装
+    解压缩
+    # mkdir /usr/local/tomcat
+    # cd /usr/local/tomcat
+    # tar -zxvf /software/apache-tomcat-7.0.54.tar.gz
+    生成链接以便版本升级
+    # ln -s apache-tomcat-7.0.54 server
+
+
+    启动Tomcat
+    # cd /usr/local/tomcat/server/bin
+    # ./startup.sh
+    Using CATALINA_BASE: /usr/local/tomcat/server
+    Using CATALINA_HOME: /usr/local/tomcat/server
+    Using CATALINA_TEMDIR: /usr/local/tomcat/server/temp
+    Using JRE_HOME: /usr/java/default
+    Using CLASS_PATH: /usr/local/tomcat/server/bin/bootstrap.jar:/usr/local/tomcat/server/bin/tomcat-juli.jar
+    Tomcat started.
+
+
+防火墙安装
+systemctl  stop firewalld
+
+systemctl mask firewalld
+
+yum install iptables-services
+
+service iptables status
+
+//设置开机启动
+
+systemctl enable iptable
+
+    测试Tomcat:
+    打开防火墙,使外部能访问
+    # /sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+    # service iptables save
+    # service iptables restart
+    或直接修改文件/etc/sysconfig/iptables.
+    # vi /etc/sysconfig/iptables
+    -A INPUT -p tcp -m tcp --dport 8080 -j ACCEPT
+    # service iptables restart
+    在浏览器输入: http://192.168.16.133:8080
+    如在本机可以输入: http://localhost:8080
+    出现tomcat的页面表示安装成功.
+
+
+    停止Tomcat
+    # ./shutdown.sh
+
+
+4.配置web管理帐号
+   修改文件conf/tomcat-users.xml，在<tomcat-users>元素中添加帐号密码，需要指定角色.
+   # vi /usr/local/tomcat/server/conf/tomcat-users.xml
+     <tomcat-users>
+       <user name="admin" password="admin" roles="admin-gui,manager-gui" />
+     </tomcat-users>
+
+
+5.配置web访问端口
+   可以修改conf目录下的文件server.xml，修改Connector元素(Tomcat的默认端口是8080)，需要重新启动Tomcat服务生效.
+   # vi /usr/local/tomcat/server/conf/server.xml
+   <Connector port="80" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" /> 
+
+
+6.配置https安全连接(ssl加密连接)
+   https连接需要用到数字证书与数字签名(MD5算法)
+   网站https连接首先需要申请数字证书，配置加密连接器，浏览器安装证书.
+   ·使用java的工具keytool产生数字证书
+     # keytool -genkey -alias tomcat -keyalg RSA
+     生成文件.keystore
+     注意:CN为主机名称，本机可用localhost
+   ·将文件.keystore放到Tomcat服务器的conf目录下
+     # cp .keystore /usr/local/tomcat/server/conf/
+   ·修改conf/server.xml文件，修改加密连接器，添加keystoreFile与keystorePass
+    <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+               maxThreads="150" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS" 
+               keystoreFile="conf/.keystore" keystorePass="123456"/>    
+   ·重新启动tomcat.浏览器输入https://localhost:8443访问,并安装证书.
+
+
+7.Tomcat的目录结构
+   ·bin     //存放Tomcat的命令脚本文件
+   ·conf    //存放Tomcat服务器的各种配置文件,最主要是server.xml
+   ·lib     //存放Tomcat服务器支撑jar包
+   ·logs    //存放日志文件
+   ·temp    //存放临时文件
+   ·webapps //web应用所在目录，外界访问web资源的存放目录
+   ·work    //Tomcat的工作目录
+
+阿里云服务器启动tomcat很慢问题解决方法
+   yum install rng-tools安装rngd服务（熵服务）
+
+   systemctl start rngd启动服务
+
+   如果你的CPU不支持DRNG特性或者像我一样使用虚拟机，可以使用/dev/unrandom来模拟。
+
+   cp /usr/lib/systemd/system/rngd.service /etc/systemd/system
+
+   编辑/etc/systemd/system/rngd.service service小结，ExecStart=/sbin/rngd -f -r /dev/urandom
+
+   systemctl daemon-reload重新载入服务
+
+   systemctl restart rngd重启服务
+
+
+8.web应用的目录结构
+   webapp                           -- web应用所在目录
+     |--- html, jsp, css, js文件等  -- 这些文件一般在web应用根目录下，根目录下的文件外界可以直接访问.
+     |--- WEB-INF 目录              -- java类、jar包、web配置文件存在这个目录下，外界无法直接访问，由web服务器负责调用.
+           |--- classes 目录        -- java类
+           |--- lib 目录            -- java类运行所需要的jar包
+           |--- web.xml 文件        -- web应用的配置文件
+
+
+9.虚拟主机的配置
+   指定虚拟主机名,修改conf/server.xml,添加<host>元素.
+   <host name="hostname.domainname" appBase="/webapps">
+     <Context path="/webapp" docBase="/webapps/webapp"/>
+   </host>
+   例:
+   <host name="www.163.com" appBase="/webapps">
+   </host>
+   <host name="mail.163.com" appBase="/mailapps">
+   </host>
+   须设置DNS解析(host文件或DNS系统).
+
+
+
+
+10.web应用和虚拟目录的映射.
+   可以修改xml配置文件的<Context>元素来设置web应用和虚拟目录的映射.
+   ·conf/server.xml         //在<host>元素下添加<Context path="/webdir" docBase="/webappdir"/>,需要重新启动Tomcat服务生效，不建议使用.
+   ·conf/context.xml        //添加<Context>元素所有web应用有效.
+   ·conf/[enginename]/[hostname]/context.xml.default  //[enginename]一般是Catalina，主机[hostname]的所有web应用有效.
+   ·conf/[enginename]/[hostname]/   //在目录下任意建一个文件(扩展名xml),文件名即为虚拟目录名.多级目录使用#分割. <Context docBase="/webappdir"/>
+                                     //缺省值web应用目录可以定义为ROOT.xml，添加<Context docBase="/webappdir"/>,需重新启动Tomcat服务器.
+   ·META-INF/context.xml    //
+   可以将web应用放在webapps目录下让Tomcat服务器自动映射，适用开发环境，实际运用环境中不用自动映射。
+   如没有修改配置文件，web应用目录为ROOT时则为默认web应用。
+
+
+11.web应用首页(welcome file)的配置
+   修改web应用的配置文件: [webapp]/WEB-INF/web.xml
+    <welcome-file-list>
+       <welcome-file>index.html</welcome-file>
+       <welcome-file>index.htm</welcome-file>
+       <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+
+
+
+
+
+
+
+
+
+
+
+
+卸载Firewall并安装iptables后重新安装回Firewall。安装Firewall启动时，提示Failed to start
+
+firewalld.service: Unit firewalld.service is masked.
+1
+搜索尝试了大神们的解决方法，输入指令
+
+systemctl unmask firewalld.service
+1
+此时可以正常启动Firewall了。 
+接下来顺便讲述一下Firewall的安装，及一些简单配置。 
+查看状态，看电脑上是否已经安装 firewalld
+
+#systemctl status firewalld
+#yum install firewalld  //安装firewalld 防火墙
+#systemctl start firewalld.service   //开启防火墙
+# systemctl stop firewalld.service   //关闭防火墙
+# systemctl enable firewalld.service  //设置开机自动启动
+# systemctl disable firewalld.service   //设置关闭开机制动启动
+#firewall-cmd --reload  //在不改变状态的条件下重新加载防火墙
+
+
+启用某个服务
+
+# firewall-cmd --zone=public --add-service=https   //临时
+# firewall-cmd --permanent --zone=public --add-service=https  //永久
+1
+2
+开启某个端口
+
+#firewall-cmd --permanent --zone=public --add-port=8080-8081/tcp  //永久
+#firewall-cmd  --zone=public --add-port=8080-8081/tcp   //临时
+1
+2
+查看开启的端口和服务
+
+#firewall-cmd --permanent --zone=public --list-services    //服务空格隔开  例如 dhcpv6-client https ss   
+#firewall-cmd --permanent --zone=public --list-ports //端口空格隔开  例如  8080-8081/tcp 8388/tcp 80/tcp
+#systemctl restart firewalld.service  //修改配置后需要重启服务使其生效
+#firewall-cmd --zone=public --query-port=8080/tcp  //查看服务是否生效（例：添加的端口为8080）
+
+
+
+
+
+
+
+

@@ -1,0 +1,50 @@
+今天安装httpd，然后试着访问以下，由于博主已经安装过一次，所以先说卸载，再说安装。
+
+卸载
+
+首先，要确认下是否有安装过，或者是系统自带了httpd服务，通过以下命令：
+
+# rpm -qa | grep httpd
+
+或者：
+# yum list | grep httpd
+
+我已经安装过一次了，所以我这边会显示如下：
+
+
+然后我先来卸载我的httpd，首先要停止httpd服务，命令如下：
+
+# systemctl stop httpd.service
+
+然后通过 rpm -e 或者yum -erase 命令都可以，不过rpm -e命名必须要自己先卸载依赖包，所以我用yum -erase命令卸载，命令如下：
+# yum erase httpd.x86_64
+
+
+中间会问一下是否确认，y就可以了，直到出现Complete! 代表卸载完成了。
+
+安装
+
+如果你想确认是否卸载干净，可以用list命令列出已经安装的查看下（卸载的第一步）。我们这里就不做这不操作了，我们直接用列出yum 仓库里面的httpd项，命令如下：
+
+# yum list | grep httpd
+
+
+然后，看到又可用项之后，我们输入以下命令进行安装：
+
+# yum install httpd
+
+
+中间输入次‘y’，也就安装完成啦。
+
+然后我们通过如下命令查看httpd的运行状态：
+
+# systemctl status httpd.service
+
+如果现实httpd没有启动的话，我们可以通过下面的命令启动服务：
+# systemctl start httpd.service
+
+
+默认的www目录在/var/www/html/下面，所以我们写入一个html文件，查看下怎么样了，输入一下命令创建一个包含hello world字符串的文件：
+# echo 'hello world' > /var/www/html/index.html
+然后，我们用curl访问下本地：
+# curl 127.0.0.1

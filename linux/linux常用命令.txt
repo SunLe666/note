@@ -1,0 +1,214 @@
+﻿1.创建文件夹：
+	mkdir [选项] DirName
+	命令中的［选项］一般有以下两种：
+    -m 用于对新建目录设置存取权限，也可以用 chmod 命令进行设置。
+    -p 需要时创建上层文件夹(或目录)，如果文件夹(或目录)已经存在，则不视为错误。
+	例一：在桌面下面创建以“demo”命名的文件夹。
+    使用以下命令即可。
+    mkdir 桌面/demo
+2.创建文件：
+	touch 文件名
+3.删除文件夹：
+	rm -d DirName --删除空文件夹
+	rm -r DirName --将目录及以下之档案亦逐一删除,递归所有的子目录,逐一询问
+	rm -f 即使原档案属性设为唯读，亦直接删除，无需逐一确认。
+	
+	使用rm -rf 目录名字 命令即可
+	-r 就是向下递归，不管有多少级目录，一并删除
+	-f 就是直接强行删除，不作任何提示的意思
+	eg
+		删除文件夹实例：rm -rf /var/log/httpd/access
+		将会删除/var/log/httpd/access目录以及其下所有文件、文件夹
+		删除文件使用实例：rm -f /var/log/httpd/access.log
+		将会强制删除/var/log/httpd/access.log这个文件
+删除test目录下的所有文件：rm -rf /test/* 
+		
+4.复制文件：
+	将/etc/sys.conf文件复制到home目录下：
+		cp /etc/sys.conf /home/
+	将当前目录"test/"以及其所有文件复制到home目录下：
+		cp -r test/ home
+	将"/etc/"目录以及所有文件和子目录以及延伸的（保留链接、文件属性）复制到/home目录下：
+		cp -a /etc/ /home
+
+文件和目录 
+	cd /home 进入 '/ home' 目录' 
+	cd .. 返回上一级目录 
+	cd ../.. 返回上两级目录 
+	cd 进入个人的主目录 
+	cd ~user1 进入个人的主目录 
+	cd - 返回上次所在的目录 
+	pwd 显示工作路径 
+	ls 查看目录中的文件 
+	ls -F 查看目录中的文件 
+	ls -l 显示文件和目录的详细资料 
+	ls -a 显示隐藏文件 
+	ls *[0-9]* 显示包含数字的文件名和目录名 
+	tree 显示文件和目录由根目录开始的树形结构(1) 
+	lstree 显示文件和目录由根目录开始的树形结构(2) 
+	mkdir dir1 创建一个叫做 'dir1' 的目录' 
+	mkdir dir1 dir2 同时创建两个目录 
+	mkdir -p /tmp/dir1/dir2 创建一个目录树 
+	rm -f file1 删除一个叫做 'file1' 的文件' 
+	rmdir dir1 删除一个叫做 'dir1' 的目录' 
+	rm -rf dir1 删除一个叫做 'dir1' 的目录并同时删除其内容 
+	rm -rf dir1 dir2 同时删除两个目录及它们的内容 
+	mv dir1 new_dir 重命名/移动 一个目录 
+	cp file1 file2 复制一个文件 
+	cp dir/* . 复制一个目录下的所有文件到当前工作目录 
+	cp -a /tmp/dir1 . 复制一个目录到当前工作目录 
+	cp -a dir1 dir2 复制一个目录 
+	ln -s file1 lnk1 创建一个指向文件或目录的软链接 
+	ln file1 lnk1 创建一个指向文件或目录的物理链接 
+	touch -t 0712250000 file1 修改一个文件或目录的时间戳 - (YYMMDDhhmm) 
+	
+打包和压缩文件 
+	bunzip2 file1.bz2 解压一个叫做 'file1.bz2'的文件 
+	bzip2 file1 压缩一个叫做 'file1' 的文件 
+	gunzip file1.gz 解压一个叫做 'file1.gz'的文件 
+	gzip file1 压缩一个叫做 'file1'的文件 
+	gzip -9 file1 最大程度压缩 
+	rar a file1.rar test_file 创建一个叫做 'file1.rar' 的包 
+	rar a file1.rar file1 file2 dir1 同时压缩 'file1', 'file2' 以及目录 'dir1' 
+	rar x file1.rar 解压rar包 
+	unrar x file1.rar 解压rar包 
+	tar -cvf archive.tar file1 创建一个非压缩的 tarball 
+	tar -cvf archive.tar file1 file2 dir1 创建一个包含了 'file1', 'file2' 以及 'dir1'的档案文件 
+	tar -tf archive.tar 显示一个包中的内容 
+	tar -xvf archive.tar 释放一个包 
+	tar -xvf archive.tar -C /tmp 将压缩包释放到 /tmp目录下 
+	tar -cvfj archive.tar.bz2 dir1 创建一个bzip2格式的压缩包 
+	tar -xvfj archive.tar.bz2 解压一个bzip2格式的压缩包 
+	tar -cvfz archive.tar.gz dir1 创建一个gzip格式的压缩包 
+	tar -xvfz archive.tar.gz 解压一个gzip格式的压缩包 
+	zip file1.zip file1 创建一个zip格式的压缩包 
+	zip -r file1.zip file1 file2 dir1 将几个文件和目录同时压缩成一个zip格式的压缩包 
+	unzip file1.zip 解压一个zip格式压缩包 
+	
+	.tar.gz 使用tar命令进行解压
+
+ tar -zxvf java.tar.gz
+
+解压到指定的文件夹
+    tar -zxvf java.tar.gz  -C /usr/java
+gz文件的解压 gzip 命令
+
+     gzip -b java.gz
+	
+	
+YUM 软件包升级器 - （Fedora, RedHat及类似系统） 
+	yum install package_name 下载并安装一个rpm包 
+	yum localinstall package_name.rpm 将安装一个rpm包，使用你自己的软件仓库为你解决所有依赖关系 
+	yum update package_name.rpm 更新当前系统中所有安装的rpm包 
+	yum update package_name 更新一个rpm包 
+	yum remove package_name 删除一个rpm包 
+	yum list 列出当前系统中安装的所有包 
+	yum search package_name 在rpm仓库中搜寻软件包 
+	yum clean packages 清理rpm缓存删除下载的包 
+	yum clean headers 删除所有头文件 
+	yum clean all 删除所有缓存的包和头文件 
+
+
+linux下重命名文件或文件夹使用mv既可实现。
+例子：①将一个名为abc.txt的文件重命名为1234.txt
+[root@station90 root]#mv abc.txt 1234.txt
+
+
+
+1、ifconfig command not found 
+
+      是因为没有安装此命令包，安装方法：
+
+    yum install net-tools
+2、sz和rz文件上传命令command not found 
+       执行：
+
+    wget http://www.ohse.de/uwe/releases/lrzsz-0.12.20.tar.gz
+
+      若  提示  wget   command not found 执行：
+
+    yum install wget
+        
+
+       解压lrzsz-0.12.20.tar.gz  ，命令：
+
+    tar zxvf lrzsz-0.12.20.tar.gz
+     进入解压后的目录：
+   cd lrzsz-0.12.20
+
+      配置安装路径：
+   ./configure
+
+    编译&安装：
+  make && make install
+     若提示： make commond not find 那么安装下面步骤执行： 
+安装：
+
+yum -y install gcc automake autoconf libtool make
+
+安装g++:
+
+yum install gcc gcc-c++
+
+加.sh权限
+chmod u+x *.sh 
+
+端口占用
+
+方式一：lsof命令
+1、查看占用端口进程的PID：
+
+lsof -i:{端口号}
+
+
+2、根据PID kill掉相关进程：
+
+kill -9 {PID}
+
+
+tail -f 实时查看日志文件 tail -f 日志文件log
+tail - 100f 实时查看日志文件 后一百行
+tail -f -n 100 catalina.out linux查看日志后100行
+搜寻字符串
+grep ‘搜寻字符串’ filename
+
+startup.sh的源代码，其实就是执行catalina.sh start
+
+这个命令，效果是一样的，根本不是什么调试模式，调试模式的命令是
+catalina.sh debug
+
+
+
+------
+df -hl
+显示格式为：　
+
+文件系统              容量 已用 可用 已用% 挂载点　
+
+Filesystem            Size Used Avail Use% Mounted on
+
+/dev/hda2              45G   19G   24G 44% /
+
+/dev/hda1             494M   19M 450M   4% /boot
+
+/dev/hda6             4.9G 2.2G 2.5G 47% /home
+
+/dev/hda5             9.7G 2.9G 6.4G 31% /opt
+
+none                 1009M     0 1009M   0% /dev/shm
+
+/dev/hda3             9.7G 7.2G 2.1G 78% /usr/local
+
+/dev/hdb2              75G   75G     0 100% /
+
+/dev/hdb2              75G   75G     0 100% /
+
+df -hl 查看磁盘剩余空间
+ 
+df -h 查看每个根路径的分区大小
+ 
+du -sh [目录名] 返回该目录的大小
+ 
+du -sm [文件夹] 返回该文件夹总M数
+ 
+du -h [目录名] 查看指定文件夹下的所有文件大小（包含子文件夹）
