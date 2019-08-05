@@ -71,3 +71,10 @@ key列，使用到的索引名。如果没有选择索引，值是NULL。可以�
 key_len列，索引长度。
 rows列，扫描行数。该值是个预估值。
 extra列，详细说明。注意，常见的不太友好的值，如下：Using filesort，Using temporary。
+
+11.JOIN优化 
+A表left join B表，A表inner join B表，A表right join B表. 
+LEFT JOIN A表为驱动表，INNER JOIN MySQL会自动找出那个数据少的表作用驱动表，RIGHT JOIN B表为驱动表。
+
+利用小表去驱动大表
+合理利用索引：被驱动表的索引字段作为on的限制字段。
