@@ -49,6 +49,8 @@ public class ApiDataController {
 			}
 		}
 		
+	}
+		
 		
 		
 	/**
@@ -59,28 +61,28 @@ public class ApiDataController {
 	 */
 	public void downloadBatchByFile(HttpServletResponse response, File imageArr[], String zipName,String fileType) {
 		try {
-			String basePath = filepath + File.separator;
-			String yearStr = DateUtils.year.format(new Date());
-			String monthStr = DateUtils.month.format(new Date());
-			String dayStr = DateUtils.day.format(new Date());
-			String dateStr = yearStr + "-" + monthStr + "-" + dayStr;
-			String baseFilePath = basePath + fileType + File.separator + dateStr;
-			response.setContentType("APPLICATION/OCTET-STREAM");  
-	        response.setHeader("Content-Disposition","attachment; filename="+zipName);
-	        ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
-	        try {
-	            for(int i = 0; i < imageArr.length; i++){
-	            	ZipMultFileUtils.doCompress(baseFilePath, out);
-	                response.flushBuffer();
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }finally{
-	            out.close();
-	        }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+				String basePath = filepath + File.separator;
+				String yearStr = DateUtils.year.format(new Date());
+				String monthStr = DateUtils.month.format(new Date());
+				String dayStr = DateUtils.day.format(new Date());
+				String dateStr = yearStr + "-" + monthStr + "-" + dayStr;
+				String baseFilePath = basePath + fileType + File.separator + dateStr;
+				response.setContentType("APPLICATION/OCTET-STREAM");  
+				response.setHeader("Content-Disposition","attachment; filename="+zipName);
+				ZipOutputStream out = new ZipOutputStream(response.getOutputStream());
+				try {
+					for(int i = 0; i < imageArr.length; i++){
+					ZipMultFileUtils.doCompress(baseFilePath, out);
+					response.flushBuffer();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}finally{
+					out.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 	}
 		
