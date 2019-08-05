@@ -1,0 +1,20 @@
+https://natapp.cn/article/natapp_newbie
+
+cmd -authtoken= 参数方式运行.
+     windows ,点击开始->运行->命令行提示符 后进入 natapp.exe的目录
+    运行
+windows
+ natapp -authtoken=743d9532de6d5379
+
+linux
+ ./natapp -authtoken=9ab6b9040a624f40
+
+运行成功会有 Forwarding信息 http://2rqq6w.natappfree.cc>对应的就是本机的 127.0.0.1:8080端口（端口可以再natapp里面设置）
+
+Tunnel Status  Online 代表链接成功
+Version      当前客户端版本,如果有新版本,会有提示
+Forwarding    当前穿透 网址 或者端口
+Web Interface  是本地Web管理界面,可在隧道配置打开或关闭,仅用于web开发测试
+Total Connections 总连接数
+Avg Conn Time 0.00ms 这里不代表,不代表,不代表 延时,需要注意!
+将natapp分配的网址(上图Forwarding ),鼠标选定然后复制下来(选定之后单击鼠标右键),在浏览器中访问,可以看到内网穿透成功了!
