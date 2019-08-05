@@ -11,7 +11,7 @@
 	select id from t where num=10
 	union all
 	select id from t where num=20
-4.不能前置百分
+3.不能前置百分
 	select id from t where name like ‘%abc%’
 
 若要提高效率，可以考虑全文检索。
@@ -20,7 +20,7 @@
 对于连续的数值，能用 between 就不要用 in 了：
     select id from t where num between 1 and 3 
 
-6.如果查询的两个表大小相当，那么用in和exists差别不大。 
+4.如果查询的两个表大小相当，那么用in和exists差别不大。 
 in： 
 例如：表A（小表），表B（大表）
 	select * from A where cc in (select cc from B) 效率低，用到了A表上cc列的索引；     
@@ -29,7 +29,7 @@ in：
 	select * from B where cc in (select cc from A)  效率高，用到了B表上cc列的索引；
 	select * from B where exists(select cc from A where cc=B.cc)  效率低，用到了A表上cc列的索引。 
 
-7.limit 优化
+5.limit 优化
 	> select * from product limit 100;                             //cost time: 0.33s
 	> select * from product limit 10000, 100;                 //cost time: 0.37s
 	> select * from product limit 100000, 100;               //cost time: 0.61s
@@ -43,12 +43,12 @@ in：
 	> SELECT * FROM product WHERE ID >=(SELECT ID FROM product ORDER BY id LIMIT 10000000,1) LIMIT 100;                 //cost time: 4.73s
 
 
-8.创建索引
+6.创建索引
 要尽量避免全表扫描，首先应考虑在 where 及 order by 涉及的列上建立索引 ，在经常需要进行检索的字段上创建索引。
 ALTER TABLE `table_name` ADD INDEX index_name ( `字段` );
 
 
-9.避免在索引上使用计算
+7.避免在索引上使用计算
 在where字句中，如果索引列是计算或者函数的一部分，DBMS的优化器将不会使用索引而使用全表查询,函数 
 属于计算的一种,同时在in和exists中通常情况下使用EXISTS，因为in不走索引 
 效率低：
@@ -56,11 +56,11 @@ ALTER TABLE `table_name` ADD INDEX index_name ( `字段` );
 效率高：
 	select * from user where salary>11000/22(salary是索引列)
 
-10.使用表的别名
+8.使用表的别名
 当在SQL语句中连接多个表时，请使用表的别名并把别名前缀于每个列名上。这样就可以减少解析的时间并减 
 少哪些友列名歧义引起的语法错误。
 
-11.用union all替换union
+9.用union all替换union
 当SQL语句需要union两个查询结果集合时，即使检索结果中不会有重复的记录，如果使用union这两个结果集 
 同样会尝试进行合并，然后在输出最终结果前进行排序，因此如果可以判断检索结果中不会有重复的记录时候，应 
 该用union all，这样效率就会因此得到提高。
