@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/springcloud-eureka/cloud.iml" filepath="$PROJECT_DIR$/springcloud-eureka/cloud.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud-demo.iml" filepath="$PROJECT_DIR$/springcloud-demo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud-eureka-consumer/springcloud-eureka-consumer.iml" filepath="$PROJECT_DIR$/springcloud-eureka-consumer/springcloud-eureka-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcloud-eureka-producer/springcloud-eureka-producer.iml" filepath="$PROJECT_DIR$/springcloud-eureka-producer/springcloud-eureka-producer.iml" />
+    </modules>
+  </component>
+</project>
