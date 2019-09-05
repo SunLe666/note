@@ -7,8 +7,6 @@ EurekaProducer 8089
 EurekaConsumer 8010
 
 ConfigServer 8100
-
-  http://localhost:8100/neo-config/dev
+    http://localhost:8100/neo-config/dev
 ConfigClient 8012
-
-  http://localhost:8012/hello
+    http://localhost:8012/hello
