@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/permission?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+  jpa:
+    show-sql: true
+  session:
+    store-type: redis
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+server:
+  port: 8080

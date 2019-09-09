@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会员列表</title>
+
+    <link type="text/css" rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+
+</head>
+<body>
+<h3>当前登录用户：<span th:text="${#authentication.name}"></span> | <a th:href="@{/logout}">退出</a></h3>
+<h2>这是会员管理列表页面</h2>
+<table class="table">
+    <tr>
+        <th>username</th>
+        <th>useremail</th>
+        <th>age</th>
+        <th>创建时间</th>
+        <th>操作</th>
+    </tr>
+    <tr>
+        <td style="font-size: 20px;">sunl</td>
+        <td>sunl@gmail.com</td>
+        <td>26</td>
+        <td>2019-03-01</td>
+        <td><a th:href="@{/member/detail}">详情</a> </td>
+    </tr>
+    <tr>
+        <td style="font-size: 20px;">sunl2</td>
+        <td>sunl2@gmail.com</td>
+        <td>26</td>
+        <td>2019-03-01</td>
+        <td><a th:href="@{/member/detail}">详情</a> </td>
+    </tr>
+    <tr>
+        <td style="font-size: 20px;">sunl3</td>
+        <td>sunl3@gmail.com</td>
+        <td>26</td>
+        <td>2019-03-01</td>
+        <td><a th:href="@{/member/detail}">详情</a> </td>
+    </tr>
+</table>
+</body>
+</html>
