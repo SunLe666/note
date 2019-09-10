@@ -1,2 +1,2 @@
-OAuth2 SSO jWT
+OAuth2 SSO JWT
 
