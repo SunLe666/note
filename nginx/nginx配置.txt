@@ -1,18 +1,18 @@
-NginxÊµÏÖ¸ºÔØ¾ùºâ
+Nginxå®žçŽ°è´Ÿè½½å‡è¡¡
 
-½øÈëNginxµÄÅäÖÃÎÄ¼þ¼Ð
+è¿›å…¥Nginxçš„é…ç½®æ–‡ä»¶å¤¹
 cd /usr/local/nginx/conf
 
-±à¼­nginx.confÅäÖÃÎÄ¼þ
+ç¼–è¾‘nginx.confé…ç½®æ–‡ä»¶
 vim nginx.conf
 
 
-ÐÂÔöupstream¼¯ÈºÅäÖÃµã
-#·þÎñÆ÷µÄ¼¯Èº£¨Õâ¸ö¾ÍÊÇÎÒÃÇÒªÅäÖÃµÄµØ·½£©
-#test.com:·þÎñÆ÷¼¯ÈºÃû×Ö,×Ô¶¨Òå
+æ–°å¢župstreamé›†ç¾¤é…ç½®ç‚¹
+#æœåŠ¡å™¨çš„é›†ç¾¤ï¼ˆè¿™ä¸ªå°±æ˜¯æˆ‘ä»¬è¦é…ç½®çš„åœ°æ–¹ï¼‰
+#sunle.com:æœåŠ¡å™¨é›†ç¾¤åå­—,è‡ªå®šä¹‰
 upstream  sunle.com {
-	#·þÎñÆ÷ÅäÖÃ   weightÊÇÈ¨ÖØµÄÒâË¼£¬È¨ÖØÔ½´ó£¬·ÖÅäµÄ¸ÅÂÊÔ½´ó¡£
-	#127.0.0.1:8080¡¢127.0.0.1:8081¶ÔÓ¦tomcat·þÎñÆ÷µØÖ·
+	#æœåŠ¡å™¨é…ç½®   weightæ˜¯æƒé‡çš„æ„æ€ï¼Œæƒé‡è¶Šå¤§ï¼Œåˆ†é…çš„æ¦‚çŽ‡è¶Šå¤§ã€‚
+	#127.0.0.1:8080ã€127.0.0.1:8081å¯¹åº”tomcatæœåŠ¡å™¨åœ°å€
 	server    127.0.0.1:8080  weight=1;
 	server    127.0.0.1:8081  weight=2;
 }
@@ -22,16 +22,16 @@ server {
 	server_name  localhost;
 
 	location / {
-		#ÅäÖÃ·´Ïò´úÀíµØÖ·
+		#é…ç½®åå‘ä»£ç†åœ°å€
 		proxy_pass http://sunle.com;
 		proxy_redirect default;
 	}
 }
 
-ÅäÖÃºÃÖ®ºó£¬½øÈë/usr/local/nginx/sbin/ ÎÄ¼þ¼Ð£¬ÖØÐÂË¢ÐÂÅäÖÃÎÄ¼þ
+é…ç½®å¥½ä¹‹åŽï¼Œè¿›å…¥/usr/local/nginx/sbin/ æ–‡ä»¶å¤¹ï¼Œé‡æ–°åˆ·æ–°é…ç½®æ–‡ä»¶
 ./nginx -s reload
 
-====================================ÅäÖÃÎÄ¼þ=============================================================
+====================================é…ç½®æ–‡ä»¶=============================================================
 
 worker_processes  1;
 
@@ -50,11 +50,11 @@ http {
 
     gzip  on;
 
-     #·þÎñÆ÷µÄ¼¯Èº£¨Õâ¸ö¾ÍÊÇÎÒÃÇÒªÅäÖÃµÄµØ·½£©
-	 #sunle.com:·þÎñÆ÷¼¯ÈºÃû×Ö,×Ô¶¨Òå
+     #æœåŠ¡å™¨çš„é›†ç¾¤ï¼ˆè¿™ä¸ªå°±æ˜¯æˆ‘ä»¬è¦é…ç½®çš„åœ°æ–¹ï¼‰
+	 #sunle.com:æœåŠ¡å™¨é›†ç¾¤åå­—,è‡ªå®šä¹‰
     upstream  sunle.com {
-		#·þÎñÆ÷ÅäÖÃ   weightÊÇÈ¨ÖØµÄÒâË¼£¬È¨ÖØÔ½´ó£¬·ÖÅäµÄ¸ÅÂÊÔ½´ó¡£
-		#127.0.0.1:8081¡¢127.0.0.1:8082¶ÔÓ¦tomcat·þÎñÆ÷µØÖ·
+		#æœåŠ¡å™¨é…ç½®   weightæ˜¯æƒé‡çš„æ„æ€ï¼Œæƒé‡è¶Šå¤§ï¼Œåˆ†é…çš„æ¦‚çŽ‡è¶Šå¤§ã€‚
+		#127.0.0.1:8081ã€127.0.0.1:8082å¯¹åº”tomcatæœåŠ¡å™¨åœ°å€
         server    127.0.0.1:8081  weight=1;
         server    127.0.0.1:8082  weight=2;
     }
@@ -64,7 +64,7 @@ http {
         server_name  localhost;
   
     location / {
-	¡¤		#ÅäÖÃ·´Ïò´úÀíµØÖ·
+	Â·		#é…ç½®åå‘ä»£ç†åœ°å€
             proxy_pass http://sunle.com;
             proxy_redirect default;
         }
@@ -78,13 +78,13 @@ http {
 }  
 
 
-=============================²ÎÊýËµÃ÷===============================================
-²ÎÊýËµÃ÷£º
-worker_processes£º¹¤×÷½ø³ÌµÄ¸öÊý£¬Ò»°ãÓë¼ÆËã»úµÄcpuºËÊýÒ»ÖÂ
-worker_connections£ºµ¥¸ö½ø³Ì×î´óÁ¬½ÓÊý£¨×î´óÁ¬½ÓÊý=Á¬½ÓÊý*½ø³ÌÊý£©
-include£ºÎÄ¼þÀ©Õ¹ÃûÓëÎÄ¼þÀàÐÍÓ³Éä±í
-default_type£ºÄ¬ÈÏÎÄ¼þÀàÐÍ
-sendfile £º¿ªÆô¸ßÐ§ÎÄ¼þ´«ÊäÄ£Ê½£¬sendfileÖ¸ÁîÖ¸¶¨nginxÊÇ·ñµ÷ÓÃsendfileº¯ÊýÀ´Êä³öÎÄ¼þ£¬¶ÔÓÚÆÕÍ¨Ó¦ÓÃÉèÎª on£¬Èç¹ûÓÃÀ´½øÐÐÏÂÔØµÈÓ¦ÓÃ´ÅÅÌIOÖØ¸ºÔØÓ¦ÓÃ£¬¿ÉÉèÖÃÎªoff£¬ÒÔÆ½ºâ´ÅÅÌÓëÍøÂçI/O´¦ÀíËÙ¶È£¬½µµÍÏµÍ³µÄ¸ºÔØ¡£×¢Òâ£ºÈç¹ûÍ¼Æ¬ÏÔÊ¾²»Õý³£°ÑÕâ¸ö¸Ä³Éoff¡£
-keepalive_timeout£º³¤Á¬½Ó³¬Ê±Ê±¼ä£¬µ¥Î»ÊÇÃë
-upstream£º·þÎñÆ÷µÄ¼¯ÈºÅäÖÃµã
+=============================å‚æ•°è¯´æ˜Ž===============================================
+å‚æ•°è¯´æ˜Žï¼š
+worker_processesï¼šå·¥ä½œè¿›ç¨‹çš„ä¸ªæ•°ï¼Œä¸€èˆ¬ä¸Žè®¡ç®—æœºçš„cpuæ ¸æ•°ä¸€è‡´
+worker_connectionsï¼šå•ä¸ªè¿›ç¨‹æœ€å¤§è¿žæŽ¥æ•°ï¼ˆæœ€å¤§è¿žæŽ¥æ•°=è¿žæŽ¥æ•°*è¿›ç¨‹æ•°ï¼‰
+includeï¼šæ–‡ä»¶æ‰©å±•åä¸Žæ–‡ä»¶ç±»åž‹æ˜ å°„è¡¨
+default_typeï¼šé»˜è®¤æ–‡ä»¶ç±»åž‹
+sendfile ï¼šå¼€å¯é«˜æ•ˆæ–‡ä»¶ä¼ è¾“æ¨¡å¼ï¼ŒsendfileæŒ‡ä»¤æŒ‡å®šnginxæ˜¯å¦è°ƒç”¨sendfileå‡½æ•°æ¥è¾“å‡ºæ–‡ä»¶ï¼Œå¯¹äºŽæ™®é€šåº”ç”¨è®¾ä¸º onï¼Œå¦‚æžœç”¨æ¥è¿›è¡Œä¸‹è½½ç­‰åº”ç”¨ç£ç›˜IOé‡è´Ÿè½½åº”ç”¨ï¼Œå¯è®¾ç½®ä¸ºoffï¼Œä»¥å¹³è¡¡ç£ç›˜ä¸Žç½‘ç»œI/Oå¤„ç†é€Ÿåº¦ï¼Œé™ä½Žç³»ç»Ÿçš„è´Ÿè½½ã€‚æ³¨æ„ï¼šå¦‚æžœå›¾ç‰‡æ˜¾ç¤ºä¸æ­£å¸¸æŠŠè¿™ä¸ªæ”¹æˆoffã€‚
+keepalive_timeoutï¼šé•¿è¿žæŽ¥è¶…æ—¶æ—¶é—´ï¼Œå•ä½æ˜¯ç§’
+upstreamï¼šæœåŠ¡å™¨çš„é›†ç¾¤é…ç½®ç‚¹
 
