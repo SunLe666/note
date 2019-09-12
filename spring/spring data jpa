@@ -1,0 +1,86 @@
+1.引入mysql和spring data jpa的依赖包
+    <dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!--引入JPA的依赖关系 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+2.创建实体类
+@Entity
+@Table(name="t_student")
+public class Student {
+	  @Id //声明主键
+    @GeneratedValue //标注主键生成策略
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//比如这里使用的是strategy = GenerationType.IDENTITY，表示数据库会在新行插入时自动给ID赋值，这也叫做ID自增长列
+    @Column(name = "t_id")
+    private Long id;
+    @Column(name = "t_name")
+    private String name;
+    @Column(name = "t_age")
+    private String age;
+    @Column(name = "t_school")
+    private String school;
+ }
+ 
+ 3.声明一个持久层接口
+ public interface StudentRepository extends JpaRepository<Student, Long> {
+ 
+ }
+ 
+ 4.创建contorller
+ @RestController
+@RequestMapping(value = "/student")
+public class JPAController {
+	
+	@Autowired
+	private StudentRepository studentRepository;
+
+	@RequestMapping(value = "/save", method = RequestMethod.GET)
+	public Student save(Student user) {
+		return studentRepository.save(user);
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public List<Student> list() {
+		return studentRepository.findAll();
+	}
+
+	@RequestMapping(value = "/findByName", method = RequestMethod.GET)
+	public List<Student> findByName(String name) {
+		return studentRepository.findByName(name);
+	}
+
+	@RequestMapping(value = "/count", method = RequestMethod.GET)
+	public Long countByName(String name) {
+		return studentRepository.countByName(name);
+	}
+}
+
+JpaRepository接口拥有基本的增删改查接口，包括：
+  save
+  findAll
+  findOne
+  delete
+所以这些方法我们就不需要声明了，另外还可以添加一些规范方法名进行特定字段的查询，
+如果在接口中定义的查询方法符合它的命名规则，就可以不用写实现，
+规则是findXXBy,readAXXBy,queryXXBy,countXXBy, getXXBy后面跟属性名称。
+
+=======================================
+自定义sql查询
+通过@Query注解支持，但必须使用 @Modifying 进行修饰. 以通知 SpringData, 这是一个 UPDATE 或 DELETE 操作
+  @Transactional
+  @Modifying
+  @Query("update Student u set u.name = ?1 where u.id = ?2")
+  int modifyNameById(String  name, Long id);
+
+  @Query("select u from Student u where u.age = ?1")
+  Student findByMyAge(int age);
+
+  @Transactional表示开启事务，如果不加的话会下面的异常：
+  javax.persistence.TransactionRequiredException
