@@ -1,7 +1,7 @@
-*安装Docker环境
+###安装Docker环境
 	yum install docker
 	
-*设置开机启动
+###设置开机启动
 	ervice docker start
 	chkconfig docker on
 
@@ -9,7 +9,7 @@
 	systemctl  start docker.service
 	systemctl  enable docker.service
 	
-*使用Docker中国加速器
+###使用Docker中国加速器
 	vi  /etc/docker/daemon.json
 	#添加后：
 	{
@@ -17,11 +17,11 @@
 		"live-restore": true
 	}
 
-*重启Docker
+###重启Docker
 	systemctl restart docker
 	输入docker version 返回版本信息则安装正常。
 
-*安装JDK
+###安装JDK
 	yum -y install java-1.8.0-openjdk*
 	配置环境变量 打开 vim /etc/profile 添加一下内容
 
@@ -32,7 +32,7 @@
 	source /etc/profile
 	输入java -version 返回版本信息则安装正常。
 
-*安装MAVEN
+###安装MAVEN
 	下载：weget http://mirrors.shu.edu.cn/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
 
 	## 解压
@@ -47,7 +47,7 @@
 	输入mvn -version 返回版本信息则安装正常。
 
 
-*使用 Docker 部署 Spring Boot 项目
+###使用 Docker 部署 Spring Boot 项目
 	将项目 spring-boot-docker 拷贝服务器中，进入项目路径下进行打包测试。
 	#打包
 	mvn package
