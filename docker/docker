@@ -1,1 +1,58 @@
-docker
+#docker compose安装
+安装 Docker Compose 可以通过下面命令自动下载适应版本的 Compose，并为安装脚本添加执行权限
+  sudo curl -L https://github.com/docker/compose/releases/download/1.21.2/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  sudo chmod +x /usr/local/bin/docker-compose
+  
+查看安装是否成功
+  docker-compose -v
+===================================
+使用docker compose部署项目
+  1.在 jar 包所在路径创建 Dockerfile 文件，添加以下内容
+    FROM java:8
+    VOLUME /tmp
+    ADD yourappname.jar app.jar
+    RUN bash -c 'touch /app.jar'
+    EXPOSE 9000
+    ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","app.jar"]
+
+  2.在 jar 包所在路径创建文件 docker-compose.yml，添加以下内容
+    version: '2' # 表示该 Docker-Compose 文件使用的是 Version 2 file
+    services:
+      docker-demo:  # 指定服务名称
+        build: .  # 指定 Dockerfile 所在路径
+        ports: - "80:8082" # 指定端口映射
+ 
+ 3.在 docker-compose.yml 所在路径下执行该命令 Compose 就会自动构建镜像并使用镜像启动容器
+    docker-compose up
+    docker-compose up -d  // 后台启动并运行容器
+ 
+ 4访问项目地址
+    http://192.168.65.xxx/hello
+===============================================================
+常用命令
+ps：列出所有容器
+  docker-compose ps
+logs:查看服务日志输出
+  docker-compose logs
+port：打印绑定的公共端口，下面命令可以输出 eureka 服务 8761 端口所绑定的公共端口
+  docker-compose port eureka 8761
+build：构建或者重新构建服务
+  docker-compose build
+start：启动指定服务已存在的容器
+  docker-compose start eureka
+stop：停止已运行的服务的容器
+  docker-compose stop eureka
+rm：删除指定服务的容器
+  docker-compose rm eureka
+up：构建、启动容器
+  docker-compose up
+kill：通过发送 SIGKILL 信号来停止指定服务的容器
+  docker-compose kill eureka
+pull：下载服务镜像
+scale：设置指定服务运气容器的个数，以 service=num 形式指定
+  docker-compose scale user=3 movie=3
+run：在一个服务上执行一个命令
+  docker-compose run web bash
+
+
+    
