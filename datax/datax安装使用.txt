@@ -26,11 +26,11 @@ oracle抽取数据到mysql实例
 				"name": "oraclereader",
 				"parameter": {
 					"username": "SUPPREAD",
-					"password": "SUPPREAD",
+					"password": "****",
 					"column": ["T_ID","BUSINESS_UNIT","ID_DEPARTMENT","ID_VENDOR","ID_VOUCHER","ID_INVOICE","CA_NET","CA_VAT","CA_GROSS","DR_NET","DR_VAT","DR_GROSS","RB_NET","RB_VAT","RB_GROSS","TAX_RATE","V_TIDNO","DATE_ACCOUNTING"],
 					"connection": [{
 						"table": ["CPC_S_VENDOR_V_I_RB"],
-						"jdbcUrl": ["jdbc:oracle:thin:@10.151.196.32:1521:CPCMDB"]
+						"jdbcUrl": ["jdbc:oracle:thin:@******:1521:CPCMDB"]
 					}]
 				}
 			},
@@ -45,7 +45,7 @@ oracle抽取数据到mysql实例
 						"truncate table CPC_S_VENDOR_V_I_RB"
 					],
 					"connection": [{
-						"jdbcUrl": "jdbc:mysql://10.172.27.8:3306/suppweb",
+						"jdbcUrl": "jdbc:mysql://********/suppweb",
 						"table": ["CPC_S_VENDOR_V_I_RB"]
 					}]
 				}
