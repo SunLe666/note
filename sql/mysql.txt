@@ -60,3 +60,7 @@ oracle中add_months()函数
 mysql中ADDDATE()函数
 	SELECT ADDDATE(NOW(), INTERVAL 1 MONTH); 查询结果 2017-11-12 10:15:18
 
+
+-- 导入数据
+load data local infile "F:/app/Administrator/sqlldrdata/tablefile/AA_SALES.txt" into table AA_SALES character set utf8 fields terminated by ',' ignore 1 lines;
+
