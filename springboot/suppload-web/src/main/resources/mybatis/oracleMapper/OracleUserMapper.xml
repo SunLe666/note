@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.paraview.oracleMapper.OracleUserMapper" >
+    
+      
+	<select id="getUserByCode1" parameterType="java.lang.String" resultType="com.paraview.entity.User">
+		select "id","code1"  from "acl_user" where "code1" = #{code1}
+	</select>
+			
+    <insert id="addUser" parameterType="com.paraview.entity.User">
+	 	<selectKey keyProperty="id" resultType="java.lang.Integer">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO acl_user (
+			code,name,email,status,password,updatedAt
+		) VALUES (
+			#{code1},
+			#{userName},
+			#{userEmail},
+			#{status},
+			#{code1},
+			now()
+		)	
+	 </insert>
+	
+	 <update id="updateUser" parameterType="com.paraview.entity.User">
+		UPDATE acl_user
+		<set>
+			<if test="userName != null and userName != ''">
+				name = #{userName, jdbcType=VARCHAR} ,
+			</if>
+			<if test="userEmail != null and userEmail != ''">
+				email = #{userEmail, jdbcType=VARCHAR} ,
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status, jdbcType=VARCHAR} ,
+			</if>
+			updatedAt = now()
+		</set>
+		WHERE
+		lower(code) = lower(#{code1})
+	</update>
+	
+	<insert id="addUserRole" parameterType="java.util.List" >
+	  	insert into acl_user_role(user_id,role_id) values
+		<foreach collection="list" item="item" open="(" separator="),(" close=")" index="index">
+			#{item.userId},#{item.roleId}
+		</foreach>
+	</insert>
+	
+	<select id="getRoleIdListByRoleCodeList" resultType="com.paraview.entity.UserAndRoleIdList" parameterType="java.util.List">
+	  	select distinct id as roleId from acl_role where code in 
+		<foreach collection="list" item="item" open="(" separator="," close=")" index="index">
+			#{item}
+		</foreach>
+	</select>
+	
+	<select id="getAllUser" resultType="com.paraview.entity.User" parameterType="java.util.List">
+	  	select id,code as code1,email as userEmail,name as userName from acl_user
+	</select>
+	
+	<delete id="delteUserRoleByCode1">
+		DELETE FROM 
+			acl_user_role 
+		WHERE 
+			user_id=(SELECT id FROM acl_user WHERE code=#{code1})
+	</delete>
+	
+</mapper>

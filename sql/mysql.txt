@@ -1,0 +1,33 @@
+﻿如果找不到查找到数据库文件在哪？可以使用以下命令：
+mysql> show global variables like "%datadir%";
+
+修改mysql数据存放路径
+先停止mysql服务
+找到my.ini文件
+修改datadir=C:/ProgramData/MySQL/MySQL Server 5.5\data 
+重启mysql服务
+
+查询mysql 版本
+select version();
+
+
+mysql 查看数据库中所有表的记录数
+
+use information_schema;
+
+select table_name,table_rows from tables
+
+where TABLE_SCHEMA = '数据库名称'
+
+order by table_rows asc;
+
+
+mysql‘事件计划已关闭。事件只能在服务器启动并开启事件计划时才能处理。'的警告
+通过下列语句查询event是否开启
+
+show variables like '%sche%';
+
+通过执行下列语句，来开启event_scheduler
+set global event_scheduler =1;
+或者
+set global event_scheduler=on; 

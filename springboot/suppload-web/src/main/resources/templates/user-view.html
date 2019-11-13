@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>用户页面</title>
+</head>
+<body>
+	 <!--循环遍历输出-->
+	 <table>
+	      <tr>
+	          <td>用戶id</td>
+	          <td>用戶名称</td>
+	          <td>年齡</td>
+	      </tr>
+	      <tr th:each="user:${userList}">
+	          <td th:text="${user.userId}">用戶id</td>
+	          <td th:text="${user.username}">用戶名称</td>
+	          <td th:text="${user.age}">年齡</td>
+ 	  </tr>
+	 </table>
+</body>
+</html>

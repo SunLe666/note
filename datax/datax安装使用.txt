@@ -1,0 +1,106 @@
+运行环境前提条件：
+python版本：2.6.6
+jdk版本：1.8
+
+下载安装
+DataX下载地址：http://datax-opensource.oss-cn-hangzhou.aliyuncs.com/datax.tar.gz
+将程序下载之后上传至服务器，并解压
+tar -zxvf  datax.tar.gz
+
+
+进入bin目录下执行命令
+python datax.py ../job/job.json
+
+
+oracle抽取数据到mysql实例
+=================================
+{
+"job": {
+		"setting": {
+			"speed": {
+				"channel": 5
+			}
+		},
+		"content": [{
+			"reader": {
+				"name": "oraclereader",
+				"parameter": {
+					"username": "SUPPREAD",
+					"password": "SUPPREAD",
+					"column": ["T_ID","BUSINESS_UNIT","ID_DEPARTMENT","ID_VENDOR","ID_VOUCHER","ID_INVOICE","CA_NET","CA_VAT","CA_GROSS","DR_NET","DR_VAT","DR_GROSS","RB_NET","RB_VAT","RB_GROSS","TAX_RATE","V_TIDNO","DATE_ACCOUNTING"],
+					"connection": [{
+						"table": ["CPC_S_VENDOR_V_I_RB"],
+						"jdbcUrl": ["jdbc:oracle:thin:@10.151.196.32:1521:CPCMDB"]
+					}]
+				}
+			},
+			"writer": {
+				"name": "mysqlwriter",
+				"parameter": {
+					"writeMode": "update",
+					"username": "root",
+					"password": "6gap$WcM*qB2",
+					"column": ["T_ID","BUSINESS_UNIT","ID_DEPARTMENT","ID_VENDOR","ID_VOUCHER","ID_INVOICE","CA_NET","CA_VAT","CA_GROSS","DR_NET","DR_VAT","DR_GROSS","RB_NET","RB_VAT","RB_GROSS","TAX_RATE","V_TIDNO","DATE_ACCOUNTING"],
+					"preSql":[
+						"truncate table CPC_S_VENDOR_V_I_RB"
+					],
+					"connection": [{
+						"jdbcUrl": "jdbc:mysql://10.172.27.8:3306/suppweb",
+						"table": ["CPC_S_VENDOR_V_I_RB"]
+					}]
+				}
+			}
+		}]
+	}
+}
+===========================================
+
+DataX配置定时任务
+(1)安装crond服务
+yum install crontabs
+
+
+命令说明：
+/sbin/service crond start //启动服务
+/sbin/service crond stop //关闭服务
+/sbin/service crond restart //重启服务
+/sbin/service crond reload //重新载入配置
+
+查看crond服务状态 输入
+service crond status
+
+
+(2)列出crontab文件，输入crontab -l
+若显示以下内容 ，则表示当前用户没有定时任务（xxx表示当前用户），需要创建crontab文件，并提交，查看步骤（3）
+no crontal for xxx
+
+
+
+(3)创建crontab文件(以前从未创建过crontab任务)
+创建一个名为crondatax的crontab文件，命令行进入到相应的目录   vi crondatax，创建并打开文件，输入以下内容：
+10  2 * * *  python /usr/local/datax/datax/bin/datax.py /usr/local/datax/datax/job/vendor-job.json  >>/usr/local/datax/datax/log/log.`date +\%Y\%m\%d\%H\%M\%S` 2>&1 &
+
+
+10  2 * * *表示每天的2点10分执行这个任务。
+python /usr/local/datax/datax/bin/datax.py表示安装的DataX datax.py所在的目录的绝对路径，一般在datax/bin/目录下。
+/usr/local/datax/datax/job/vendor-job.json表示作业配置文件的绝对路径
+/usr/local/datax/datax/log/log.`date +\%Y\%m\%d\%H\%M\%S`表示任务运行时产生日志的输出路径，并以log.当前时间命名，要替换成真实存在的绝对路径。
+
+
+(4)编辑已有crontab文件，修改或增加定时任务
+输入crontab -e 打开任务配置文件。增加任务即可，格式和步骤（3）一致。
+
+
+(5)提交 crontab文件
+输入crontab /home/datax/job/crondatax crondatax是步骤(4)中创建的文件的名称，如果终端所在目录就是crondatax文件所在目录，
+可以直接输入crontab crondatax。
+提交之后输入crontab -l 就能看到刚配置的任务。
+
+
+(6)重启crontab服务
+输入
+/sbin/service crond restart
+在定时的时间到后，任务便开始执行，同时会在配置的log目录下生成对应的日志文件，在日志文件中可查看任务的运行情况。
+
+
+

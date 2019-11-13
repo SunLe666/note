@@ -1,0 +1,21 @@
+server:
+  servlet:
+    context-path: /suppload-web
+  port: 8080
+
+logging:
+  level:
+    root: info
+
+spring:
+  profiles:
+    active: dev
+#mybatis:
+  #  configuration:
+  #    log-impl: STDOUT_LOGGING
+  #    map-underscore-to-camel-case: true
+#  config-location: classpath:mybatis/mybatis.cfg.xml    #  mybatis主配置文件所在路径
+ #    mapper-locations: classpath:mybatis/mapper/**/*Mapper.xml
+
+  #   mapper-locations:  classpath:mybatis/oracleMapper/*.xml     #  所有的mapper映射文件
+

@@ -1,0 +1,13 @@
+﻿查询版本
+select* from v$version;
+
+查询表所有字段和类型
+select A.COLUMN_NAME,A.DATA_TYPE  from user_tab_columns A
+where TABLE_NAME='AA_SALES';
+
+--查询表前10条数据
+select * from aa_sales where rownum<=10
+
+
+--查询当前数据库说要表名称和条数
+select table_name,num_rows from user_tables where num_rows > 1000000 ORDER BY table_name;
