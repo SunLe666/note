@@ -31,3 +31,32 @@ show variables like '%sche%';
 set global event_scheduler =1;
 或者
 set global event_scheduler=on; 
+
+
+将csv 文件存入mysql 报错The MySQL server is running with the --secure-file-priv option so it cannot execute
+secure-file-priv的值有三种情况：
+
+secure_file_prive=null ––限制mysqld 不允许导入导出
+
+secure_file_priv=/path/ – --限制mysqld的导入导出只能发生在默认的/path/目录下
+
+secure_file_priv=’’ – --不对mysqld 的导入 导出做限制
+step3:查看你的secure-file-priv设置：
+
+show variables like ‘%secure%’;
+输出默认值path
+step4:找到名为my的配置设置文件：
+修改secure-file-priv=""
+
+
+mysql 类似to_char() to_date()函数
+　　mysql日期和字符相互转换方法
+　　date_format(date,'%Y-%m-%d')------>oracle中的to_char();
+　　str_to_date(date,'%Y-%m-%d')------>oracle中的to_date();
+
+
+oracle中add_months()函数
+	SELECT add_months(SYSDATE,1) from dual; 查询结果 2017/11/12 10:15:18
+mysql中ADDDATE()函数
+	SELECT ADDDATE(NOW(), INTERVAL 1 MONTH); 查询结果 2017-11-12 10:15:18
+
