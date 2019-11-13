@@ -1,0 +1,27 @@
+﻿ktr的运行：运行transformation文件是通过pan.sh来运行的。
+打开cmd命令行窗口，转到pan.sh所在的目录，如/home/zzq/data-integration,然后执行文件的命令为
+./pan.sh -file=/home/zzq/work/test.ktr
+
+如果要输出日志则
+./pan.sh -file=/home/zzq/work/test.ktr >> /home/zzq/log/kettle.log
+
+后台模式运行使用
+./pan.sh -file=/home/zzq/work/genotypeHiveLinux.ktr >> /home/zzq/log/kettle.log &
+
+kjb的运行：运行job文件是通过kitchen.sh来运行的。
+打开cmd命令行窗口，转到kitchen.sh所在的目录，如/home/zzq/data-integration,然后执行文件的命令为
+./kitchen.sh -file=/home/zzq/work/test.kjb
+
+
+如果要输出日志则
+./kitchen.sh -file=/home/zzq/work/test.kjb  >> /home/zzq/log/kettle.log
+
+kill -9 15079
+
+
+nohup ./kitchen.sh -file=./file/cpc/load-cpc/vendor_v_i_r.kjb >> ./logs/vendor.log 2>&1 &
+
+nohup ./kitchen.sh -file=./file/cpc/load-cpc/load-data-cpc.kjb >> ./logs/cpc.log 2>&1 &
+
+nohup ./kitchen.sh -file=./file/nsa/load-nsa/load-data-nsa.kjb >> ./logs/nsa.log 2>&1 &
+
