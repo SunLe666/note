@@ -31,3 +31,21 @@ sqluldr2.exe user=oraclesun/oraclesun@localhost/ORACLETEST sql=F:\app\Administra
 3) replace  --删除旧记录(用 delete from table 语句)，替换成新装载的记录
 
 4) truncate --删除旧记录(用 truncate table 语句)，替换成新装载的记录
+
+
+
+
+
+当前日：select TRUNC(SYSDATE)  from dual;
+
+前一天： select TRUNC(SYSDATE - 1)   from dual;
+
+前一天转换为日期格式： select to_char(TRUNC(sysdate-1),'fmdd')   from dual;
+
+to_char(TRUNC(sysdate-1),'fmdd')
+
+前一个月日期： select add_months(trunc(sysdate),-1) from dual;
+
+前一个月：select TRUNC(add_months(trunc(sysdate),-1),'MM') from dual;
+
+后一个月转换为字符串：select to_char(add_months(trunc(sysdate),1),'yyyymm') from dual;  
