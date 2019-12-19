@@ -1,0 +1,250 @@
+package com.para.osc.web.contorller;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.methods.RequestEntity;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.google.gson.Gson;
+import com.para.osc.framework.common.message.Message;
+import com.para.osc.framework.common.message.MessageUtils;
+import com.para.osc.framework.common.util.StringUtils;
+import com.para.osc.framework.common.web.controller.OscController;
+import com.para.osc.framework.exception.checked.ServiceException;
+import com.para.osc.framework.security.model.PrUser;
+import com.para.osc.framework.security.service.IPrUserService;
+import com.para.osc.framework.security.view.UserInfo;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+
+/**
+ * 新增用户Api
+ * 
+ * 
+ * */
+
+@Controller
+@RequestMapping(value={"/userInfoApi"})
+public class UserInfoRestController extends OscController{
+	
+	private static final long serialVersionUID = 1L;
+	private final static Logger logger = Logger.getLogger(UserInfoRestController.class);
+
+
+	@Autowired
+	private IPrUserService userService;
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/doAddUser",produces="application/json;charset=utf-8")
+	public Message doAdduser(@RequestBody PrUser prUser) {
+		try {	
+			this.checkNonEmpty(prUser);
+			UserInfo userInfo = new UserInfo();
+			userInfo.setUserModel(prUser);
+			logger.info("接口调用:"+StringUtils.obj2Str(userInfo.getUserModel()));
+			return MessageUtils.success((this.userService.doAddUserRest(userInfo)));
+		} catch (ServiceException e) {
+			logger.error("errorCode:"+e.getErrorCode()+"errorMessage:"+e.getMessage());
+			return MessageUtils.message(e.getErrorCode());
+		}
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/doNewAddUser/{uid}/{userName}/{jobNum}/{orgId}/{orgName}/{companies}/{sex}/{email}/{phone}/{userType}")
+	public Message doNewAdduser(@PathVariable("uid")String uid,@PathVariable("userName") String userName,@PathVariable("jobNum") String jobNum,
+			@PathVariable("orgId") String orgId,@PathVariable("orgName") String orgName,@PathVariable("companies")String companies,@PathVariable("sex")String sex,
+			@PathVariable("email")String email,@PathVariable("phone")String phone,@PathVariable("userType")String userType) {
+		try {	
+			this.checkNonEmpty(uid, userName, sex, email, phone, userType);
+			UserInfo userInfo = this.assemblyInfo(uid, userName,jobNum,orgId,orgName,companies,sex, email, phone, userType);
+			logger.info("接口调用:"+StringUtils.obj2Str(userInfo.getUserModel()));
+			return MessageUtils.success((this.userService.doAddUserRest(userInfo)));
+		} catch (ServiceException e) {
+			logger.error(e.getMessage());
+			return MessageUtils.message(e.getErrorCode());
+		}
+	}
+	
+	
+	public UserInfo assemblyInfo(String uid, String userName,String jobNum,String orgId,String orgName,String companies,String sex,String email,String phone,String userType){
+		UserInfo userInfo = new UserInfo();
+		PrUser prUser = new PrUser();
+		prUser.setUid(uid);
+		prUser.setUserName(userName);
+		prUser.setJobNum(jobNum);
+		prUser.setOrgId(orgId);
+		prUser.setOrgName(orgName);
+		prUser.setCompanies(companies);
+		prUser.setSex(sex);
+		prUser.setEmail(email);
+		prUser.setPhone(phone);
+		prUser.setUserType(userType);
+		userInfo.setUserModel(prUser);
+		return userInfo;
+		
+	}
+	
+	
+	public void checkNonEmpty(String uid, String userName,String sex,String email,String phone,String userType) throws ServiceException{
+		if (StringUtils.isEmpty(uid)) {
+			logger.info("uid[" + uid + "] id null ");
+			throw new ServiceException("0194");
+		}
+		if (StringUtils.isEmpty(userName)) {
+			logger.info("userName[" + userName + "] is null ");
+			throw new ServiceException("0195");
+		}
+
+		/*if (StringUtils.isEmpty(sex)) {
+			logger.info("sex[" + sex + "] is null ");
+			throw new ServiceException("sex is null");
+		}*/
+		
+		if (StringUtils.isEmpty(email)) {
+			logger.info("email[" + sex + "] is null ");
+			throw new ServiceException("0196");
+		}
+		
+		/*if (StringUtils.isEmpty(phone)) {
+			logger.info("phone[" + sex + "] is null ");
+			throw new ServiceException("phone is null");
+		}*/
+		
+		if (StringUtils.isEmpty(userType)) {
+			logger.info("userType[" + userType + "] is null ");
+			throw new ServiceException("0197");
+		}
+	}
+	
+	
+	public void checkNonEmpty(PrUser prUser) throws ServiceException{
+		if (StringUtils.isEmpty(prUser.getUid())) {
+			logger.info("uid[" + prUser.getUid() + "] id null ");
+			throw new ServiceException("0194");
+		}
+		if (StringUtils.isEmpty(prUser.getUserName())) {
+			logger.info("userName[" + prUser.getUserName() + "] is null ");
+			throw new ServiceException("0195");
+			
+		}
+
+		/*if (StringUtils.isEmpty(sex)) {
+			logger.info("sex[" + sex + "] is null ");
+			throw new ServiceException("sex is null");
+		}*/
+		
+		if (StringUtils.isEmpty(prUser.getEmail())) {
+			logger.info("email[" + prUser.getEmail() + "] is null ");
+			throw new ServiceException("0196");
+		}
+		
+		/*if (StringUtils.isEmpty(phone)) {
+			logger.info("phone[" + sex + "] is null ");
+			throw new ServiceException("phone is null");
+		}*/
+		
+		if (StringUtils.isEmpty(prUser.getUserType())) {
+			logger.info("userType[" + prUser.getUserType() + "] is null ");
+			throw new ServiceException("0197");
+		}
+	}
+	
+	
+	/**
+	 * post 调用接口
+	 * @return 
+	 */
+	public static void main(String[] aggs) {
+		String url = "http://127.0.0.1/osc/userInfoApi/doAddUser";
+		byte[] requestBytes;
+		String result = "";
+		try {
+			JSONObject js = new JSONObject();
+			js.put("uid", "11");
+			js.put("userName", "sunl");
+			js.put("email", "1253332@qq.com");
+			js.put("userType", "1");
+			String string = js.toString();
+
+			requestBytes = string.getBytes("utf-8");
+			HttpClient httpClient = new HttpClient();// 客户端实例化
+			PostMethod postMethod = new PostMethod(url);
+			// 设置请求头Authorization
+			// postMethod.setRequestHeader("Authorization", "Basic " + authorization);
+			// 设置请求头 Content-Type
+			postMethod.setRequestHeader("Content-Type", "application/json");
+			InputStream inputStream = new ByteArrayInputStream(requestBytes, 0, requestBytes.length);
+			RequestEntity requestEntity = new InputStreamRequestEntity(inputStream, requestBytes.length,
+					"application/json; charset=utf-8"); // 请求体
+			postMethod.setRequestEntity(requestEntity);
+			httpClient.executeMethod(postMethod);// 执行请求
+			InputStream soapResponseStream = postMethod.getResponseBodyAsStream();// 获取返回的流
+			byte[] datas = null;
+			datas = readInputStream(soapResponseStream);// 从输入流中读取数据
+			result = new String(datas, "UTF-8");// 将二进制流转为String
+			// 打印返回结果
+			System.out.println("result:------" + result);
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} // 将参数转为二进制流
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		/**
+		 * String result = {"aaa":"111","bbb":"222"} 提取JSON字符串数据
+		 */
+
+		if (result != null && !"".equals(result)) {
+			result = "[" + result + "]";
+			JSONArray jsonarray = JSONArray.fromObject(result);
+			String jsonString = jsonarray.getString(0);
+			Map deviceMap = new HashMap();
+			Gson gson = new Gson();
+			deviceMap = gson.fromJson(jsonString, deviceMap.getClass());
+			System.out.println(deviceMap.get("aaa"));
+		}
+		System.out.println(result);
+	}
+	
+	/**
+	 * 从输入流中读取数据
+	 */
+	private static byte[] readInputStream(InputStream soapResponseStream) {
+		byte[] buffer = new byte[1024];
+		int len = -1;
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try {
+			while ((len = soapResponseStream.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, len);
+			}
+			outputStream.close();
+			soapResponseStream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return outputStream.toByteArray();
+	}
+}
